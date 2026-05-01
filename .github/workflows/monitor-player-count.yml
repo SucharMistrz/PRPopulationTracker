@@ -1,0 +1,72 @@
+name: Monitor PR player count
+
+on:
+  schedule:
+    - cron: "0 17 * * *"
+      timezone: "Europe/Warsaw"
+
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: "Manual test duration in minutes"
+        required: true
+        default: "5"
+        type: string
+      interval_seconds:
+        description: "Manual test interval in seconds"
+        required: true
+        default: "30"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pr-player-count-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 260
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Monitor player count
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python scripts/monitor_player_count.py \
+              --interval-seconds 30 \
+              --stop-at-local-time "21:00:00" \
+              --timezone "Europe/Warsaw" \
+              --output "data/player_counts.tsv"
+          else
+            python scripts/monitor_player_count.py \
+              --interval-seconds "${{ inputs.interval_seconds }}" \
+              --duration-minutes "${{ inputs.duration_minutes }}" \
+              --timezone "Europe/Warsaw" \
+              --output "data/player_counts.tsv"
+          fi
+
+      - name: Commit results
+        shell: bash
+        run: |
+          if [ -z "$(git status --porcelain -- data/player_counts.tsv)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/player_counts.tsv
+          git commit -m "Update PR player count data"
+          git push
