@@ -15,7 +15,7 @@ on:
       interval_seconds:
         description: "Manual test interval in seconds"
         required: true
-        default: "30"
+        default: "31"
         type: string
 
 permissions:
