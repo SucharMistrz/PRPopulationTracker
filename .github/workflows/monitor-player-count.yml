@@ -2,7 +2,7 @@ name: Monitor PR player count
 
 on:
   schedule:
-    - cron: "00 18 * * *"
+    - cron: "00 17 * * *"
       timezone: "Europe/Warsaw"
 
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
       interval_seconds:
         description: "Manual test interval in seconds"
         required: true
-        default: "31"
+        default: "35"
         type: string
 
 permissions:
@@ -28,7 +28,7 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 260
+    timeout-minutes: 300
 
     steps:
       - name: Check out repository
