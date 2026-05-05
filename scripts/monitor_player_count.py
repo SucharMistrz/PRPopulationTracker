@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo
 
 API_URL = "https://servers.realitymod.com/api/ServerInfo"
 DEFAULT_OUTPUT_FILE = Path("data/player_counts.tsv")
-DEFAULT_TIMEZONE = "Europe/Warsaw"
+DEFAULT_TIMEZONE = "Europe/London"
 
 
 def parse_args() -> argparse.Namespace:
