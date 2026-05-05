@@ -2,7 +2,7 @@ name: Monitor PR player count
 
 on:
   schedule:
-    - cron: "00 17 * * *"
+    - cron: "55 16 * * *"
       timezone: "Europe/Warsaw"
 
   workflow_dispatch:
