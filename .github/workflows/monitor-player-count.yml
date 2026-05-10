@@ -2,7 +2,7 @@ name: Monitor PR player count
 
 on:
   schedule:
-    - cron: "00 15 * * *"
+    - cron: "00 16 * * *"
       timezone: "Europe/London"
 
   workflow_dispatch:
@@ -44,8 +44,8 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             python scripts/monitor_player_count.py \
-              --interval-seconds 30 \
-              --stop-at-local-time "20:00:00" \
+              --interval-seconds 40 \
+              --stop-at-local-time "21:00:00" \
               --timezone "Europe/London" \
               --output "data/player_counts.tsv"
           else
