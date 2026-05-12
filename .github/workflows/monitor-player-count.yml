@@ -2,7 +2,7 @@ name: Monitor PR player count
 
 on:
   schedule:
-    - cron: "00 16 * * *"
+    - cron: "45 15 * * *"
       timezone: "Europe/London"
 
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
       interval_seconds:
         description: "Manual test interval in seconds"
         required: true
-        default: "40"
+        default: "45"
         type: string
 
 permissions:
@@ -44,8 +44,8 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             python scripts/monitor_player_count.py \
-              --interval-seconds 40 \
-              --stop-at-local-time "21:00:00" \
+              --interval-seconds 45 \
+              --stop-at-local-time "20:45:00" \
               --timezone "Europe/London" \
               --output "data/player_counts.tsv"
           else
